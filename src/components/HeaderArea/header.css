@@ -1,0 +1,10 @@
+.main-header-tm {
+    background-color:#FFA726;
+    color: rgb(255, 255, 255);
+    padding:40px 10px;
+}
+
+.main-header-tm h1 {
+    margin: 0 auto;
+    text-align: center;
+}

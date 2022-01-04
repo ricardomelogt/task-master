@@ -1,0 +1,42 @@
+.register-wrapper {
+    max-width: 480px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #CCC;
+    background-color: white;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.register-form {
+    padding:30px;
+}
+
+.register-form div {
+    display: flex;
+    margin:20px auto;
+    justify-content: center;
+}
+
+.register-form div .input-register {
+    flex:1;
+    height: 30px;
+}
+
+.register-form div label {
+    width: 55px;
+    text-align: center;
+    padding-right: 10px;
+    line-height: 30px;
+}
+
+.register-form div .register-date-label {
+    width: 150px;
+    text-align: left;
+}
+
+.register-form div button {
+    width: 150px;
+    height: 40px;
+    margin: 0 10px;
+    cursor: pointer;
+ }
