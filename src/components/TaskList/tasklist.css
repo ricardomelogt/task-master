@@ -1,0 +1,48 @@
+.tl-container {
+    max-width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px #CCC;
+    background-color: white;
+    margin: 15px auto;
+    padding: 20px;
+    display: flex;
+    align-content: center;
+    justify-content: right;
+}
+
+.tl-desc {
+    display: none;
+}
+.tl-title {
+    flex:30;
+    display: flex;
+    align-content: center;
+    justify-items: right;
+}
+.tl-title h3 {
+    flex: 1;
+    align-self: center;
+}
+.tl-checkbox {
+    width: 30px;
+    margin: 0 20px;
+    cursor: pointer;
+}
+.tl-arrow {
+    align-self: center;
+    padding: 10px;
+    margin: 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+.tl-date {
+    flex:1;
+    align-self: center;
+    padding:20px 30px;
+}
+.tl-btn {
+    padding:20px 10px;
+    flex:1;
+    align-self: center;
+    cursor: pointer;
+}
