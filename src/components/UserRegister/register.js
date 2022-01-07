@@ -58,24 +58,24 @@ export const UserRegister = () => {
         <div className='register-wrapper'>
             <form className='register-form'>
                 <div>
-                    <label htmlFor=''>Email:</label>
-                    <input className='input-register' type='text' name='email' maxLength='25' onChange={e => setRegEmail(e.target.value)}></input>
+                    <label htmlFor='form-email'>Email:</label>
+                    <input className='input-register' id="form-email" type='text' name='email' maxLength='25' onChange={e => setRegEmail(e.target.value)}></input>
                 </div>
                 <div>
-                    <label htmlFor=''>Senha:</label>
-                    <input className='input-register' type='password' name='password' maxLength='20' placeholder='no minímo 6 caracteres...' onChange={e => setRegPassword(e.target.value)}></input>
+                    <label htmlFor='form-pwd'>Senha:</label>
+                    <input className='input-register' id="form-pwd" type='password' name='pwd' maxLength='20' placeholder='no minímo 6 caracteres...' onChange={e => setRegPassword(e.target.value)}></input>
                 </div>
                 <div>
-                    <label htmlFor=''>Nome:</label>
-                    <input className='input-register' type='text' name='name' maxLength='25' onChange={e => setRegName(e.target.value)}></input>
+                    <label htmlFor='form-name'>Nome:</label>
+                    <input className='input-register' id='form-name' type='text' name='name' maxLength='25' onChange={e => setRegName(e.target.value)}></input>
                 </div>
                 <div>
-                    <label htmlFor=''>CPF:</label>
-                    <input className='input-register' type='number' name='cpf'  maxLength='11' onChange={e => setRegCpf(e.target.value)}></input>
+                    <label htmlFor='form-cpf'>CPF:</label>
+                    <input className='input-register' id='form-cpf' type='number' name='cpf'  maxLength='11' onChange={e => setRegCpf(e.target.value)}></input>
                 </div>
                 <div>
-                    <label className='register-date-label' htmlFor=''>Data de Nascimento</label>
-                    <input className='input-register' type='date' name='birth'  onChange={e => setRegDate(e.target.value)}></input>
+                    <label className='register-date-label' htmlFor='form-birth'>Data de Nascimento</label>
+                    <input className='input-register' id='form-birth' type='date' name='birth'  onChange={e => setRegDate(e.target.value)}></input>
                 </div>
                 <div>
                     <button type="button" onClick={handleRegister}>Registrar</button>

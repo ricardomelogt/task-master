@@ -32,12 +32,12 @@ export const LoginArea = () => {
         <div className="login-wrapper">
             <form className="login-form">
                 <div>
-                    <label htmlFor='username'>Email:</label>
-                    <input id='form-user' type='text' name='username' onChange={e => setUser(e.target.value)}></input>
+                    <label htmlFor='login-user'>Email:</label>
+                    <input id='login-user' type='text' name='username' onChange={e => setUser(e.target.value)}></input>
                 </div>
                 <div>
-                <label htmlFor='password'>Senha:</label>
-                    <input id='form-pwd' type='password' name='password' onChange={e => setPwd(e.target.value)}></input>
+                <label htmlFor='login-pwd'>Senha:</label>
+                    <input id='login-pwd' type='password' name='password' onChange={e => setPwd(e.target.value)}></input>
                 </div>
                 <div>
                     <button type='button' onClick={loginHandler}>Entrar</button>
