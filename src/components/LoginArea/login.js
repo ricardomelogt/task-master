@@ -21,10 +21,10 @@ export const LoginArea = () => {
 
         //validação de login
         if ( findUser === undefined || findUser.password !== pwd) {
-            alert('Credenciais inválidas'); // login fail
+            console.log('Credenciais inválidas'); // login fail
         }
         else {
-            console.log('login ok');
+            window.localStorage.setItem('@task-manager/email', JSON.stringify(user));
             setLoginOk(true);
         }
 

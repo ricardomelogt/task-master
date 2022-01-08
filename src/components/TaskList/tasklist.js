@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './tasklist.css';
 import * as S from './list-script';
 import { users } from '../../data/users';
+import { Navigate } from 'react-router-dom';
 
 export const TaskList = () => {
 
@@ -9,17 +10,22 @@ export const TaskList = () => {
         window.localStorage.setItem('@task-manager/users', JSON.stringify(users))
     }
 
+    const user = JSON.parse(window.localStorage.getItem('@task-manager/email'));
     const localUserList = JSON.parse(window.localStorage.getItem('@task-manager/users'));
+    const findUser = localUserList.find( obj => obj.email === user );
 
-    const [userTasks, setUserTasks] = useState( localUserList[0].tasks );
+    const [userTasks, setUserTasks] = useState( findUser.tasks );
+    const [newTitle, setNewTitle] = useState('Escreva aqui...');
+    const [newDate, setNewDate] = useState('');
+    const [newDesc, setNewDesc] = useState(''); // fazer novo form para add
 
     const addTask = ()=> {
         setUserTasks(userTasks.concat([
             {
-                isDone: true,
-                title: 'Comprar pão no mercado, o retorno',
-                date: '05-01-2022',
-                description: '5.000.000 pães bolacha'
+                isDone: false,
+                title: newTitle,
+                date: newDate,
+                description: newDesc
             }
         ]));
     }; // adicionar tarefa no array de tarefas do usuário
@@ -31,35 +37,49 @@ export const TaskList = () => {
             if (index !== itemIndex) {
                 return obj;
             }
-        }
-
+        };
         setUserTasks(userTasks.filter(excluirIndex));
     }; // excluir tarefa no array de tarefas do usuário
 
     useEffect(() => {
         console.log('usertasks effect');
-        localUserList[0].tasks = userTasks; 
+        findUser.tasks = userTasks; 
         window.localStorage.setItem('@task-manager/users', JSON.stringify(localUserList));
-    }, [userTasks, localUserList]);
+    }, [userTasks, findUser, localUserList]);
 
     window.addEventListener('keydown', (e) => {
         if(e.key === 'q') {
-            console.log(localUserList);
+            console.log(findUser);
         }
     });
 
+    if (findUser === undefined) {
+        alert('user undefined');
+        return <Navigate to='/'/>
+    }
+    console.log(findUser);
+
     return (
         <div className='tasklist-wrapper'>
+            <div className='tl-container'>
             <div className='tl-add-btn' onClick={addTask}>ADICIONAR</div>
+            </div>
+            
             <ul className='tl-list'>
                 {   
                     userTasks.map((task, index)=>{
+                        const hasDesc = ()=>{
+                            if ( task.description.length === 0 ) {
+                                return 'hideArrow';
+                            };
+                        }
+                        console.log()
                         return(
                         <li key={index} className='tl-container tl-item'>
                             <div className='tl-title'>
                                 <input type="checkbox" className='tl-checkbox' defaultChecked={task.isDone} onChange={(e)=>{userTasks[index].isDone = e.target.checked}}/>
                                 <h3>{task.title}</h3>
-                                <div className='tl-info' onClick={S.showDescription}>🔽</div>
+                                <div className={`tl-info ${hasDesc()}`} onClick={S.showDescription}>🔽</div>
                             </div>
                             <div className='tl-date'>{task.date}</div>
                             <div className='tl-btn'>✏️</div>
