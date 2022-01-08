@@ -1,15 +1,16 @@
 import './login.css';
 import { users } from '../../data/users';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 export const LoginArea = () => {
 
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
+    const [loginOk, setLoginOk] = useState(false);
 
     if ( window.localStorage.getItem('@task-manager/users') === null ) {
-        window.localStorage.setItem('@task-manager/users', JSON.stringify(users))
+        window.localStorage.setItem('@task-manager/users', JSON.stringify(users));
     }
 
     const localUsers = JSON.parse(window.localStorage.getItem('@task-manager/users'));
@@ -20,13 +21,18 @@ export const LoginArea = () => {
 
         //validação de login
         if ( findUser === undefined || findUser.password !== pwd) {
-            alert('Credenciais inválidas') // login fail
+            alert('Credenciais inválidas'); // login fail
         }
         else {
-            alert('Bem vindo!') // login autorizado
+            console.log('login ok');
+            setLoginOk(true);
         }
 
-    }
+    };
+
+    if (loginOk) {
+        return <Navigate to='/list'/>
+    } // se o login for autenticado, prosseguir para a lista de tarefas...
 
     return (
         <div className="login-wrapper">

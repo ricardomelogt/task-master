@@ -1,6 +1,7 @@
 import './register.css';
 import { users } from '../../data/users';
 import { useState } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 
 export const UserRegister = () => {
 
@@ -9,6 +10,7 @@ export const UserRegister = () => {
     const [regName, setRegName] = useState('');
     const [regCpf, setRegCpf] = useState('');
     const [regDate, setRegDate] = useState('');
+    const [registerFinished, setRegisterFinished] = useState(false);
     
     if ( window.localStorage.getItem('@task-manager/users') === null ) {
         window.localStorage.setItem('@task-manager/users', JSON.stringify(users))
@@ -37,7 +39,7 @@ export const UserRegister = () => {
                 name: regName,
                 cpf: regCpf,
                 birth: regDate,
-                tasks: {}
+                tasks: []
             }
 
             // validação da lista de usuários
@@ -49,9 +51,14 @@ export const UserRegister = () => {
             } else {
                 localUsers.push(newUser);
                 window.localStorage.setItem('@task-manager/users', JSON.stringify(localUsers))
-                console.log(localUsers)
+                alert('Usuário cadastrado com sucesso!');
+                setRegisterFinished(true);
             }
         }
+    }
+
+    if (registerFinished) {
+        return <Navigate to='/'/>
     }
 
     return (
@@ -79,6 +86,7 @@ export const UserRegister = () => {
                 </div>
                 <div>
                     <button type="button" onClick={handleRegister}>Registrar</button>
+                    <button type="button"><Link className="back-home" to='/'>Voltar</Link></button>
                 </div>
             </form>
         </div>

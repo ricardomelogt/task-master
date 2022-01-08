@@ -1,41 +1,52 @@
+import { useEffect, useState } from 'react';
 import './tasklist.css';
 import * as S from './list-script';
-import { useState } from 'react';
+import { users } from '../../data/users';
 
 export const TaskList = () => {
 
-    const [userTasks, setUserTasks] = useState( [
-        {
-            isDone: false,
-            title: 'Task title',
-            date: '03-01-2022',
-            description: '...'
-        },
-        {
-            isDone: false,
-            title: 'Task title',
-            date: '03-01-2022',
-            description: '...'
-        },
-        {
-            isDone: true,
-            title: 'Comprar pão no mercado',
-            date: '05-01-2022',
-            description: '10 pães bolacha, 05 franceses e 08 pães doces.'
-        }
-    ] )
+    if ( window.localStorage.getItem('@task-manager/users') === null ) {
+        window.localStorage.setItem('@task-manager/users', JSON.stringify(users))
+    }
+
+    const localUserList = JSON.parse(window.localStorage.getItem('@task-manager/users'));
+
+    const [userTasks, setUserTasks] = useState( localUserList[0].tasks );
 
     const addTask = ()=> {
         setUserTasks(userTasks.concat([
             {
                 isDone: true,
-                title: 'Comprar pão no mercado',
+                title: 'Comprar pão no mercado, o retorno',
                 date: '05-01-2022',
-                description: '10 pães bolacha, 05 franceses e 08 pães doces.'
+                description: '5.000.000 pães bolacha'
             }
-        ]))
-        console.log(userTasks)
-    }
+        ]));
+    }; // adicionar tarefa no array de tarefas do usuário
+
+    const deleteTask = (e) => {
+        let getItem = e.target.parentElement;
+        let itemIndex = Array.from(getItem.parentNode.children).indexOf(getItem);
+        const excluirIndex = (obj, index) => {
+            if (index !== itemIndex) {
+                return obj;
+            }
+        }
+
+        setUserTasks(userTasks.filter(excluirIndex));
+    }; // excluir tarefa no array de tarefas do usuário
+
+    useEffect(() => {
+        console.log('usertasks effect');
+        localUserList[0].tasks = userTasks; 
+        window.localStorage.setItem('@task-manager/users', JSON.stringify(localUserList));
+    }, [userTasks, localUserList]);
+
+    window.addEventListener('keydown', (e) => {
+        if(e.key === 'q') {
+            console.log(localUserList);
+        }
+    });
 
     return (
         <div className='tasklist-wrapper'>
@@ -52,9 +63,9 @@ export const TaskList = () => {
                             </div>
                             <div className='tl-date'>{task.date}</div>
                             <div className='tl-btn'>✏️</div>
-                            <div className='tl-btn' onClick={S.deleteItem}>🗑️</div>
+                            <div className='tl-btn' onClick={deleteTask}>🗑️</div>
                             <div className={`tl-desc tl-desc-show-${task.description}`}> {/* parei aqui*/}
-                                {task.description + ' ' + task.isDone}
+                                {task.description}
                             </div>
                         </li>
                         )
