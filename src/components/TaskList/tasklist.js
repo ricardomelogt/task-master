@@ -62,7 +62,10 @@ export const TaskList = () => {
     return (
         <div className='tasklist-wrapper'>
             <div className='tl-container'>
-            <div className='tl-add-btn' onClick={addTask}>ADICIONAR</div>
+               <input className='addInputText' type='text' maxLength='23' placeholder='Nova Tarefa' onChange={(e)=>{setNewTitle(e.target.value)}}/>
+                <input type='date' placeholder='Data' onChange={(e)=>{setNewDate(e.target.value)}}/>
+                <input type='text' maxLength='255' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
+                <div className='tl-add-btn' onClick={addTask}>ADICIONAR</div>
             </div>
             
             <ul className='tl-list'>

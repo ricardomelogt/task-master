@@ -9,7 +9,7 @@ import { TaskList } from './components/TaskList/tasklist';
 function App() {
 
   return (
-      <div>
+      <>
           <Header></Header>
           <BrowserRouter>
             <Routes>
@@ -18,7 +18,7 @@ function App() {
                 <Route path="/list" element={<TaskList/>} />
             </Routes>
           </ BrowserRouter>
-      </div>
+      </>
   )
 }
 
