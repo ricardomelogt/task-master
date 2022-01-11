@@ -14,7 +14,7 @@ export const LoginArea = () => {
     }
 
     const localUsers = JSON.parse(window.localStorage.getItem('@task-manager/users'));
-
+    
     const loginHandler = () => {
 
         const findUser = localUsers.find( obj => obj.email === user );
@@ -29,6 +29,12 @@ export const LoginArea = () => {
         }
 
     };
+
+    window.addEventListener('keyup', (e)=>{
+        if (e.key === "Enter") {
+            loginHandler();
+        }
+    });
 
     if (loginOk) {
         return <Navigate to='/list'/>

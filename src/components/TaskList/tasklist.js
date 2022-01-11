@@ -15,19 +15,23 @@ export const TaskList = () => {
     const findUser = localUserList.find( obj => obj.email === user );
 
     const [userTasks, setUserTasks] = useState( findUser.tasks );
-    const [newTitle, setNewTitle] = useState('Escreva aqui...');
+    const [newTitle, setNewTitle] = useState('');
     const [newDate, setNewDate] = useState('');
     const [newDesc, setNewDesc] = useState(''); // fazer novo form para add
 
     const addTask = ()=> {
-        setUserTasks(userTasks.concat([
-            {
-                isDone: false,
-                title: newTitle,
-                date: newDate,
-                description: newDesc
-            }
-        ]));
+        if (newTitle !== '') {
+            setUserTasks(userTasks.concat([
+                {
+                    isDone: false,
+                    title: newTitle,
+                    date: newDate,
+                    description: newDesc
+                }
+            ]));
+        } else {
+            alert('A tarefa precisa ao menos ter um título');
+        };
     }; // adicionar tarefa no array de tarefas do usuário
 
     const deleteTask = (e) => {
@@ -41,17 +45,23 @@ export const TaskList = () => {
         setUserTasks(userTasks.filter(excluirIndex));
     }; // excluir tarefa no array de tarefas do usuário
 
+    const handleEdit = () => {
+       const lightBox = document.querySelector('.tl-edit-task');
+       if ( lightBox.classList.contains('tl-hide') ) {
+           lightBox.classList.remove('tl-hide');
+           window.addEventListener('keyup', (e) => {
+               if ( e.key === 'Escape' ) {
+                   lightBox.classList.add('tl-hide');
+               }
+           })
+       }
+    };
+
     useEffect(() => {
         console.log('usertasks effect');
         findUser.tasks = userTasks; 
         window.localStorage.setItem('@task-manager/users', JSON.stringify(localUserList));
     }, [userTasks, findUser, localUserList]);
-
-    window.addEventListener('keydown', (e) => {
-        if(e.key === 'q') {
-            console.log(findUser);
-        }
-    });
 
     if (findUser === undefined) {
         alert('user undefined');
@@ -61,11 +71,21 @@ export const TaskList = () => {
 
     return (
         <div className='tasklist-wrapper'>
-            <div className='tl-container'>
-               <input className='addInputText' type='text' maxLength='23' placeholder='Nova Tarefa' onChange={(e)=>{setNewTitle(e.target.value)}}/>
-                <input type='date' placeholder='Data' onChange={(e)=>{setNewDate(e.target.value)}}/>
-                <input type='text' maxLength='255' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
-                <div className='tl-add-btn' onClick={addTask}>ADICIONAR</div>
+            <div className='tl-container add-area'>
+               <input className='addInputText' type='text' maxLength='32' placeholder='Nova Tarefa.. ✏️' onChange={(e)=>{setNewTitle(e.target.value)}}/>
+                <input className='tl-date add-area' type='date' onChange={(e)=>{setNewDate(e.target.value)}}/>
+                <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
+                <div className='tl-add-btn' onClick={addTask}>➕</div>
+            </div>
+
+            <div className="tl-edit-task tl-hide">
+                <p> Pressione "Esc" para cancelar.</p>
+                <div className='tl-container add-area'>
+                    <input className='addInputText' type='text' maxLength='32' placeholder='Título.. ✏️' onChange={(e)=>{setNewTitle(e.target.value)}}/>
+                    <input className='tl-date add-area' type='date' onChange={(e)=>{setNewDate(e.target.value)}}/>
+                    <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
+                    <div className='tl-add-btn' onClick={addTask}>ok</div>
+                </div>
             </div>
             
             <ul className='tl-list'>
@@ -85,7 +105,7 @@ export const TaskList = () => {
                                 <div className={`tl-info ${hasDesc()}`} onClick={S.showDescription}>🔽</div>
                             </div>
                             <div className='tl-date'>{task.date}</div>
-                            <div className='tl-btn'>✏️</div>
+                            <div className='tl-btn' onClick={handleEdit}>✏️</div>
                             <div className='tl-btn' onClick={deleteTask}>🗑️</div>
                             <div className={`tl-desc tl-desc-show-${task.description}`}> {/* parei aqui*/}
                                 {task.description}
