@@ -5,5 +5,5 @@ export const Header = () => {
         <div className="main-header-tm">
             <h1>TaskMaster</h1>
         </div>
-    )
-}
+    );
+};

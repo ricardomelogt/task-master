@@ -13,7 +13,7 @@ export const UserRegister = () => {
     const [registerFinished, setRegisterFinished] = useState(false);
     
     if ( window.localStorage.getItem('@task-manager/users') === null ) {
-        window.localStorage.setItem('@task-manager/users', JSON.stringify(users))
+        window.localStorage.setItem('@task-manager/users', JSON.stringify(users));
     }
 
     const localUsers = JSON.parse( window.localStorage.getItem('@task-manager/users') );
@@ -40,22 +40,22 @@ export const UserRegister = () => {
                 cpf: regCpf,
                 birth: regDate,
                 tasks: []
-            }
+            };
 
             // validação da lista de usuários
-            let [checkEmail, checkCpf] = [localUsers.find( obj => obj.email === newUser.email ), localUsers.find( obj => obj.cpf === newUser.cpf )]
+            let [checkEmail, checkCpf] = [localUsers.find( obj => obj.email === newUser.email ), localUsers.find( obj => obj.cpf === newUser.cpf )];
 
             if(checkEmail !== undefined || checkCpf !== undefined){
-                console.log('Email ou CPF já cadastrados.')
-                console.log(localUsers)
+                alert('Email ou CPF já cadastrados.');
+                console.log(localUsers);
             } else {
                 localUsers.push(newUser);
-                window.localStorage.setItem('@task-manager/users', JSON.stringify(localUsers))
+                window.localStorage.setItem('@task-manager/users', JSON.stringify(localUsers));
                 alert('Usuário cadastrado com sucesso!');
                 setRegisterFinished(true);
             }
         }
-    }
+    };
 
     if (registerFinished) {
         return <Navigate to='/'/>

@@ -7,9 +7,10 @@ import { Navigate } from 'react-router-dom';
 export const TaskList = () => {
 
     if ( window.localStorage.getItem('@task-manager/users') === null ) {
-        window.localStorage.setItem('@task-manager/users', JSON.stringify(users))
+        window.localStorage.setItem('@task-manager/users', JSON.stringify(users));
     }
 
+    const [taskIndex, setTaskIndex] = useState();
     const user = JSON.parse(window.localStorage.getItem('@task-manager/email'));
     const localUserList = JSON.parse(window.localStorage.getItem('@task-manager/users'));
     const findUser = localUserList.find( obj => obj.email === user );
@@ -29,9 +30,13 @@ export const TaskList = () => {
                     description: newDesc
                 }
             ]));
+            document.querySelectorAll('input, textarea').forEach(element => {
+                element.value = '';
+            });
+            setNewTitle('');setNewDate('');setNewDesc('');
         } else {
             alert('A tarefa precisa ao menos ter um título');
-        };
+        }
     }; // adicionar tarefa no array de tarefas do usuário
 
     const deleteTask = (e) => {
@@ -45,20 +50,47 @@ export const TaskList = () => {
         setUserTasks(userTasks.filter(excluirIndex));
     }; // excluir tarefa no array de tarefas do usuário
 
-    const handleEdit = () => {
-       const lightBox = document.querySelector('.tl-edit-task');
-       if ( lightBox.classList.contains('tl-hide') ) {
+    const handleEdit = (e) => {
+        let getItem = e.target.parentElement;
+        setTaskIndex(Array.from(getItem.parentNode.children).indexOf(getItem));
+
+        const lightBox = document.querySelector('.tl-edit-task');
+
+        if ( lightBox.classList.contains('tl-hide') ) {
            lightBox.classList.remove('tl-hide');
            window.addEventListener('keyup', (e) => {
                if ( e.key === 'Escape' ) {
                    lightBox.classList.add('tl-hide');
                }
-           })
-       }
+           });
+        } // edit mode lightbox show/hide
+    };
+
+    const confirmEdit = () => {
+        if(newTitle !== '') {
+            document.querySelector('.tl-edit-task').classList.add('tl-hide');
+            userTasks.splice(taskIndex, 0, {
+                isDone: false,
+                title: newTitle,
+                date: newDate,
+                description: newDesc
+            } );
+            const excluirIndex = (obj, index) => {
+                if (index !== (taskIndex+1)) {
+                    return obj;
+                }
+            };
+            setUserTasks(userTasks.filter(excluirIndex));
+            setNewTitle('');setNewDate('');setNewDesc('');
+            document.querySelectorAll('input, textarea').forEach(element => {
+                element.value = '';
+            });
+        } else {
+            alert('A tarefa deve ter um título');
+        }
     };
 
     useEffect(() => {
-        console.log('usertasks effect');
         findUser.tasks = userTasks; 
         window.localStorage.setItem('@task-manager/users', JSON.stringify(localUserList));
     }, [userTasks, findUser, localUserList]);
@@ -67,7 +99,6 @@ export const TaskList = () => {
         alert('user undefined');
         return <Navigate to='/'/>
     }
-    console.log(findUser);
 
     return (
         <div className='tasklist-wrapper'>
@@ -75,7 +106,7 @@ export const TaskList = () => {
                <input className='addInputText' type='text' maxLength='32' placeholder='Nova Tarefa.. ✏️' onChange={(e)=>{setNewTitle(e.target.value)}}/>
                 <input className='tl-date add-area' type='date' onChange={(e)=>{setNewDate(e.target.value)}}/>
                 <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
-                <div className='tl-add-btn' onClick={addTask}>➕</div>
+                <div className='tl-add-btn' onClick={addTask()}>+</div>
             </div>
 
             <div className="tl-edit-task tl-hide">
@@ -84,7 +115,7 @@ export const TaskList = () => {
                     <input className='addInputText' type='text' maxLength='32' placeholder='Título.. ✏️' onChange={(e)=>{setNewTitle(e.target.value)}}/>
                     <input className='tl-date add-area' type='date' onChange={(e)=>{setNewDate(e.target.value)}}/>
                     <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
-                    <div className='tl-add-btn' onClick={addTask}>ok</div>
+                    <div className='tl-add-btn tl-edit' onClick={confirmEdit}>ok</div>
                 </div>
             </div>
             
@@ -96,7 +127,6 @@ export const TaskList = () => {
                                 return 'hideArrow';
                             };
                         }
-                        console.log()
                         return(
                         <li key={index} className='tl-container tl-item'>
                             <div className='tl-title'>
