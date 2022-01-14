@@ -106,7 +106,7 @@ export const TaskList = () => {
                <input className='addInputText' type='text' maxLength='32' placeholder='Nova Tarefa.. ✏️' onChange={(e)=>{setNewTitle(e.target.value)}}/>
                 <input className='tl-date add-area' type='date' onChange={(e)=>{setNewDate(e.target.value)}}/>
                 <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
-                <div className='tl-add-btn' onClick={addTask()}>+</div>
+                <div className='tl-add-btn' onClick={addTask}>+</div>
             </div>
 
             <div className="tl-edit-task tl-hide">
