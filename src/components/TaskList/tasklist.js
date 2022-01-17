@@ -10,23 +10,28 @@ export const TaskList = () => {
         window.localStorage.setItem('@task-manager/users', JSON.stringify(users));
     }
 
-    const [taskIndex, setTaskIndex] = useState();
     const user = JSON.parse(window.localStorage.getItem('@task-manager/email'));
     const localUserList = JSON.parse(window.localStorage.getItem('@task-manager/users'));
     const findUser = localUserList.find( obj => obj.email === user );
 
+    const [taskIndex, setTaskIndex] = useState();
     const [userTasks, setUserTasks] = useState( findUser.tasks );
+    const [orderBy, setOrderBy] = useState('');
+    const [toggle, setToggle] = useState(false);
+
     const [newTitle, setNewTitle] = useState('');
     const [newDate, setNewDate] = useState('');
     const [newDesc, setNewDesc] = useState(''); // fazer novo form para add
 
     const addTask = ()=> {
         if (newTitle !== '') {
+            let [year, month, day] = newDate.split('-');
             setUserTasks(userTasks.concat([
                 {
                     isDone: false,
                     title: newTitle,
                     date: newDate,
+                    dateNum: parseInt(year+month+day),
                     description: newDesc
                 }
             ]));
@@ -69,10 +74,12 @@ export const TaskList = () => {
     const confirmEdit = () => {
         if(newTitle !== '') {
             document.querySelector('.tl-edit-task').classList.add('tl-hide');
+            let [day, month, year] = newDate.split('-');
             userTasks.splice(taskIndex, 0, {
                 isDone: false,
                 title: newTitle,
                 date: newDate,
+                dateNum: parseInt(year+month+day),
                 description: newDesc
             } );
             const excluirIndex = (obj, index) => {
@@ -88,12 +95,49 @@ export const TaskList = () => {
         } else {
             alert('A tarefa deve ter um título');
         }
+    }; // edit task 
+
+    const handleOrderBy = () => {
+        setOrderBy(document.querySelector('#select-order').value);
+        console.log('orderValue: '+orderBy);
+        var ordering = document.querySelector('#select-order').value;
+
+        if (ordering === 'date-up') {
+            setUserTasks(
+                userTasks.sort((a, b) => {
+                    if (a.dateNum > b.dateNum) {return 1}
+                    if (a.dateNum < b.dateNum) {return -1}
+                    return 0;
+                })
+            );
+        };
+        if (ordering === 'date-down') {
+            setUserTasks(
+                userTasks.sort((a, b) => {
+                    if (a.dateNum > b.dateNum) {return -1}
+                    if (a.dateNum < b.dateNum) {return 1}
+                    return 0;
+                })
+            );
+        };
+        if (ordering === 'checked') {
+            setUserTasks(
+                userTasks.sort((a,b)=>{return (a.isDone === b.isDone) ? 0 : a.isDone ? -1 : 1;})
+            );
+        };
+    }; // order by
+
+    const handleCheck = () => {
+        setToggle(true);
     };
 
     useEffect(() => {
         findUser.tasks = userTasks; 
         window.localStorage.setItem('@task-manager/users', JSON.stringify(localUserList));
-    }, [userTasks, findUser, localUserList]);
+        setToggle(false);
+
+        console.log('use effect')
+    }, [userTasks, findUser, localUserList, toggle]);
 
     if (findUser === undefined) {
         alert('user undefined');
@@ -107,7 +151,7 @@ export const TaskList = () => {
                 <input className='tl-date add-area' type='date' onChange={(e)=>{setNewDate(e.target.value)}}/>
                 <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
                 <div className='tl-add-btn' onClick={addTask}>+</div>
-            </div>
+            </div> {/* Add task area */}
 
             <div className="tl-edit-task tl-hide">
                 <p> Pressione "Esc" para cancelar.</p>
@@ -117,7 +161,18 @@ export const TaskList = () => {
                     <textarea maxLength='128' placeholder='Descrição(opcional)' onChange={(e)=>{setNewDesc(e.target.value)}}/>
                     <div className='tl-add-btn tl-edit' onClick={confirmEdit}>ok</div>
                 </div>
-            </div>
+            </div> {/* Edit task lightbox */}
+
+            <div className="tl-order-by">
+                <span>Ordenar por: </span>
+                <select id='select-order' onChange={handleOrderBy}>
+                    <option value="">selecione...</option>
+                    <option value='date-up' >data crescente</option>
+                    <option value='date-down'>data decrescente</option>
+                    <option value='checked'>marcados</option>
+                    <option value='unchecked'>desmarcados</option>
+                </select>
+            </div> {/* select order by */}
             
             <ul className='tl-list'>
                 {   
@@ -130,19 +185,19 @@ export const TaskList = () => {
                         return(
                         <li key={index} className='tl-container tl-item'>
                             <div className='tl-title'>
-                                <input type="checkbox" className='tl-checkbox' defaultChecked={task.isDone} onChange={(e)=>{userTasks[index].isDone = e.target.checked}}/>
+                                <input type="checkbox" className='tl-checkbox' defaultChecked={task.isDone} onChange={(e)=>{userTasks[index].isDone = e.target.checked; handleCheck()}}/>
                                 <h3>{task.title}</h3>
                                 <div className={`tl-info ${hasDesc()}`} onClick={S.showDescription}>🔽</div>
                             </div>
                             <div className='tl-date'>{task.date}</div>
                             <div className='tl-btn' onClick={handleEdit}>✏️</div>
                             <div className='tl-btn' onClick={deleteTask}>🗑️</div>
-                            <div className={`tl-desc tl-desc-show-${task.description}`}> {/* parei aqui*/}
+                            <div className={`tl-desc tl-desc-show-${task.description}`}>
                                 {task.description}
                             </div>
                         </li>
                         )
-                    }) //end map <li>
+                    }) //end map <li> tasks
                 }
             </ul>
         </div>
