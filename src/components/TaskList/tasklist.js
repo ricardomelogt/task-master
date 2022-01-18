@@ -26,11 +26,13 @@ export const TaskList = () => {
     const addTask = ()=> {
         if (newTitle !== '') {
             let [year, month, day] = newDate.split('-');
+            let fixDate = `${day}-${month}-${year}`;
+            if(day === undefined){fixDate = ''};
             setUserTasks(userTasks.concat([
                 {
                     isDone: false,
                     title: newTitle,
-                    date: newDate,
+                    date: fixDate,
                     dateNum: parseInt(year+month+day),
                     description: newDesc
                 }
@@ -74,11 +76,13 @@ export const TaskList = () => {
     const confirmEdit = () => {
         if(newTitle !== '') {
             document.querySelector('.tl-edit-task').classList.add('tl-hide');
-            let [day, month, year] = newDate.split('-');
+            let [year, month, day] = newDate.split('-');
+            let fixDate = `${day}-${month}-${year}`;
+            if(day === undefined){fixDate = ''};
             userTasks.splice(taskIndex, 0, {
                 isDone: false,
                 title: newTitle,
-                date: newDate,
+                date: fixDate,
                 dateNum: parseInt(year+month+day),
                 description: newDesc
             } );
@@ -99,7 +103,6 @@ export const TaskList = () => {
 
     const handleOrderBy = () => {
         setOrderBy(document.querySelector('#select-order').value);
-        console.log('orderValue: '+orderBy);
         var ordering = document.querySelector('#select-order').value;
 
         if (ordering === 'date-up') {
@@ -110,7 +113,7 @@ export const TaskList = () => {
                     return 0;
                 })
             );
-        };
+        }
         if (ordering === 'date-down') {
             setUserTasks(
                 userTasks.sort((a, b) => {
@@ -119,12 +122,7 @@ export const TaskList = () => {
                     return 0;
                 })
             );
-        };
-        if (ordering === 'checked') {
-            setUserTasks(
-                userTasks.sort((a,b)=>{return (a.isDone === b.isDone) ? 0 : a.isDone ? -1 : 1;})
-            );
-        };
+        }
     }; // order by
 
     const handleCheck = () => {
@@ -136,7 +134,6 @@ export const TaskList = () => {
         window.localStorage.setItem('@task-manager/users', JSON.stringify(localUserList));
         setToggle(false);
 
-        console.log('use effect')
     }, [userTasks, findUser, localUserList, toggle]);
 
     if (findUser === undefined) {
@@ -169,8 +166,6 @@ export const TaskList = () => {
                     <option value="">selecione...</option>
                     <option value='date-up' >data crescente</option>
                     <option value='date-down'>data decrescente</option>
-                    <option value='checked'>marcados</option>
-                    <option value='unchecked'>desmarcados</option>
                 </select>
             </div> {/* select order by */}
             
@@ -199,7 +194,7 @@ export const TaskList = () => {
                         )
                     }) //end map <li> tasks
                 }
-            </ul>
+            </ul> {/* task list */}
         </div>
     )
 }

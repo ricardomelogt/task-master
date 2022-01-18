@@ -1,10 +1,10 @@
 export const users = [
     {
         email: "admin@teste.com",
-        password: "123",
+        password: "123456",
         name: "Administrador",
         cpf: "12345678900",
-        birth: "1991-02-18",
+        birth: "1991-07-20",
         tasks: [
             {
                 isDone: false,
@@ -29,12 +29,4 @@ export const users = [
             }
         ]
     },
-    {
-        email: "ricardo@teste.com",
-        password: "123",
-        name: "Ricardo Melo",
-        cpf: "12345678901",
-        birth: "1991-02-18",
-        tasks: []
-    }
 ];

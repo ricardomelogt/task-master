@@ -47,7 +47,6 @@ export const UserRegister = () => {
 
             if(checkEmail !== undefined || checkCpf !== undefined){
                 alert('Email ou CPF já cadastrados.');
-                console.log(localUsers);
             } else {
                 localUsers.push(newUser);
                 window.localStorage.setItem('@task-manager/users', JSON.stringify(localUsers));

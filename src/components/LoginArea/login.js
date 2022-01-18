@@ -21,7 +21,7 @@ export const LoginArea = () => {
 
         //validação de login
         if ( findUser === undefined || findUser.password !== pwd) {
-            console.log('Credenciais inválidas'); // login fail
+            alert('Credenciais inválidas'); // login fail
         }
         else {
             window.localStorage.setItem('@task-manager/email', JSON.stringify(user));
@@ -29,12 +29,6 @@ export const LoginArea = () => {
         }
 
     };
-
-    window.addEventListener('keyup', (e)=>{
-        if (e.key === "Enter") {
-            loginHandler();
-        }
-    });
 
     if (loginOk) {
         return <Navigate to='/list'/>
